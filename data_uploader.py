@@ -3,79 +3,75 @@ from datetime import date
 
 class UploadData:
     """
-    كلاس لتحميل بيانات الحساب والتعليقات إلى ملف Excel
     Class to upload account data and comments to an Excel file.
     """
     def __init__(self, comments, post_details, comment_counts, account_details):
         """
-        تهيئة الكائن بالبيانات المطلوبة
         Initialize the object with required data.
         """
-        self.comments = comments  # قائمة التعليقات لكل منشور
-        self.post_details = post_details  # تفاصيل كل منشور
-        self.comment_counts = comment_counts  # عدد التعليقات لكل منشور
-        self.account_details = account_details  # تفاصيل الحساب
-        self.workbook = openpyxl.Workbook()  # إنشاء ملف Excel جديد
+        self.comments = comments  # List of comments for each post
+        self.post_details = post_details  # Details of each post
+        self.comment_counts = comment_counts  # Number of comments per post
+        self.account_details = account_details  # Account details
+        self.workbook = openpyxl.Workbook()  # Create a new Excel workbook
 
     def upload_data_to_xlsx_file(self):
         """
-        رفع البيانات إلى ملف Excel
         Upload the data to an Excel file.
         """
-        # إنشاء الصفحة الرئيسية لمعلومات الحساب
+        # Create the main sheet for account information
         main_sheet = self.workbook.active
         main_sheet.title = "Account_Information"
 
-        # إضافة رؤوس الأعمدة لمعلومات الحساب
-        main_sheet.append(["Account Name", "Number of Posts", "Followers"])  # أسماء الأعمدة
+        # Add column headers for account information
+        main_sheet.append(["Account Name", "Number of Posts", "Followers"])  # Column headers
 
-        # إضافة بيانات الحساب
+        # Add account data
         for account in self.account_details:
             main_sheet.append([
-                account.get("name", "NaN"),  # اسم الحساب
-                account.get("count_of_posts", "NaN"),  # عدد المنشورات
-                account.get("followers", "NaN")  # عدد المتابعين
+                account.get("name", "NaN"),  # Account name
+                account.get("count_of_posts", "NaN"),  # Number of posts
+                account.get("followers", "NaN")  # Number of followers
             ])
 
-        # إنشاء صفحات منفصلة لكل منشور
+        # Create separate sheets for each post
         for i, post_comments in enumerate(self.comments):
-            # إنشاء صفحة جديدة لكل منشور
+            # Create a new sheet for each post
             post_sheet = self.workbook.create_sheet(title=f"Post {i + 1}")
 
-            # إضافة تفاصيل المنشور
+            # Add post details
             for detail in self.post_details[i]:
                 for key, value in detail.items():
-                    post_sheet.append([key, value])
+                    post_sheet.append([key, value])  # Key-value pairs for post details
 
-            # إضافة عدد التعليقات
+            # Add the number of comments
             post_sheet.append(["Number of Comments", self.comment_counts[i]])
 
-            # إضافة فراغ للفصل بين الأقسام
-            post_sheet.append([])  # سطر فارغ
+            # Add empty rows to separate sections
+            post_sheet.append([])  # Empty row
             post_sheet.append([])
 
-            # إضافة رؤوس الأعمدة للتعليقات
+            # Add column headers for comments
             post_sheet.append([
                 "Commentor Name", "Commentor URL", "Comment", "Replies", "Likes", "Time Posted", "Date Posted"
             ])
 
-            # إضافة بيانات التعليقات
+            # Add comment data
             for comment in post_comments:
                 post_sheet.append([
-                    comment.get("commentor_name", "NaN"),  # اسم المعلق
-                    comment.get("commentor_url", "NaN"),  # رابط المعلق
-                    comment.get("comment", "NaN"),  # نص التعليق
-                    comment.get("replies", "NaN"),  # عدد الردود
-                    comment.get("likes", "NaN"),  # عدد الإعجابات
-                    comment.get("time_posted", "NaN"),  # الوقت
-                    comment.get("date_posted", "NaN")  # التاريخ
+                    comment.get("commentor_name", "NaN"),  # Commentor's name
+                    comment.get("commentor_url", "NaN"),  # Commentor's profile URL
+                    comment.get("comment", "NaN"),  # Comment text
+                    comment.get("replies", "NaN"),  # Number of replies
+                    comment.get("likes", "NaN"),  # Number of likes
+                    comment.get("time_posted", "NaN"),  # Time the comment was posted
+                    comment.get("date_posted", "NaN")  # Date the comment was posted
                 ])
 
-        # حفظ الملف باسم مناسب يتضمن اسم الحساب وتاريخ اليوم
+        # Save the file with a name that includes the account name and today's date
         file_name = f'{self.account_details[0]["name"]}_{date.today()}.xlsx'
         self.workbook.save(file_name)
 
-        # طباعة رسالة تأكيد
+        # Print confirmation message
         print("\n-------------------------------------------------------------------------------------------------\n")
-        print(f"Data uploaded successfully to:[ {file_name} ]!")
-
+        print(f"Data uploaded successfully to: [ {file_name} ]!")

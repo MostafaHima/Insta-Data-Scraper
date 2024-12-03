@@ -1,3 +1,4 @@
+
 """
 Script Overview:
 This script automates the process of scraping Instagram account data. It logs into the account, collects account details,
@@ -5,9 +6,21 @@ post URLs, and comments, and then uploads the collected data into an Excel file.
 
 Author: Mostafa Ibrahim Ahmed
 
+Features:
+- Automatic login to Instagram
+- Account details collection (followers, following, posts, more.)
+- Post URL collection and comment extraction
+- Data export to Excel for easy analysis
+
+Benefits:
+- Efficient data collection process
+- Comprehensive data for further analysis
+- User-friendly script with customizable parameters
+
 Instructions:
-Please make sure to update your Instagram login credentials and input the target Instagram URL.
+Please ensure you update your Instagram login credentials and input the target Instagram URL.
 """
+
 
 import time
 from selenium import webdriver
@@ -22,12 +35,28 @@ all_comments = []  # List to store all comments collected from posts
 all_details = []  # List to store all post details
 counts_comments = []  # List to store the count of comments per post
 
-# Instagram profile URL
-"https://www.instagram.com/yasmine_sabri/"
+"https://www.instagram.com/raisa6690/"
 
 # User login credentials - Update with your own credentials
-email = "mostafabr185@gmail.com"
-password = "36XY/2g3PSZ,HD?"
+# email = pifica6025@jonespal.com
+# password = dfg3r4r34efdsf234r34fdsdf44r523r
+
+# User login credentials - Prompt the user to input their credentials
+try:
+    # Requesting the email and password from the user
+    email = input("Please enter your email: ")
+    password = input("Please enter your password: ")
+
+    # Check if either input is empty
+    if not email or not password:
+        raise ValueError("Email or password cannot be empty.")
+
+
+
+except ValueError as e:
+    print(f"Error: {e}")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
 
 # Chrome options for running the script
 chrome_options = webdriver.ChromeOptions()
@@ -47,14 +76,14 @@ init_login = InstagramLogin(driver=driver, email=email, password=password, accou
 init_login.login()  # Login to Instagram
 init_login.navigate_to_account()  # Navigate to the account page
 
-# Wait for page to load and collect account details
+# Wait for the page to load and collect account details
 time.sleep(7)
 init_account_details = AccountDetails(driver=driver)
-account_details = init_account_details.get_account_details()
+account_details = init_account_details.get_account_details()  # Get account details
 
 # Collect the URLs of posts from the profile
 init_posts_link = PostsLink(driver=driver)
-links = init_posts_link.collection_post_url()  # Get post URLs
+links = init_posts_link.collection_post_url()  # Collect post URLs
 
 # Iterate over each post URL to collect details and comments
 print("\n-----------------------------------------------------------------------------------------------------------")
@@ -66,18 +95,19 @@ for index, link in enumerate(links, start=1):
     collection_comments = init_collection_comments.fetch_post_details()  # Fetch post details and comments
 
     # Store the collected data for each post
-    all_comments.append(init_collection_comments.final_comments)
-    all_details.append(init_collection_comments.posts_details)
-    counts_comments.append(len(init_collection_comments.final_comments))  # Count comments per post
+    all_comments.append(init_collection_comments.final_comments)  # Store all comments
+    all_details.append(init_collection_comments.posts_details)  # Store post details
+    counts_comments.append(len(init_collection_comments.final_comments))  # Store the number of comments per post
 
     print(f"Finished Post: {index}")
     print("\n=======================================================================================================\n")
     time.sleep(5)  # Wait before processing the next post
-
+    if index == 5:
+        break
 
 # Upload the collected data to an Excel file
 upload = UploadData(comments=all_comments, post_details=all_details, comment_counts=counts_comments, account_details=account_details)
-upload.upload_data_to_xlsx_file()  # Upload the data
+upload.upload_data_to_xlsx_file()  # Upload the data to Excel
 
 print("Data collection and upload complete!")
 print("\n-------------------------------------------------------------------------------------------------------------")
