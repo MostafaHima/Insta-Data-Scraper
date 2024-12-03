@@ -46,8 +46,6 @@ try:
     if not email or not password:
         raise ValueError("Email or password cannot be empty.")
 
-
-
 except ValueError as e:
     print(f"Error: {e}")
 except Exception as e:
