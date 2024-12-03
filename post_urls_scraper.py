@@ -50,11 +50,6 @@ class PostsLink:
                     current_count = len(self.clean_links)
                     print(f"Number of links collected so far: {current_count}")
 
-                    # Stop collecting once 12 links are gathered (assuming a limit per requirement).
-                    if current_count >= 12:
-                        print("Collected enough links. Exiting...")
-                        break
-
                     # If new links were found, reset scroll attempts.
                     if current_count > previous_count:
                         self.scroll_attempts = 0

@@ -94,9 +94,8 @@ for index, link in enumerate(links, start=1):
 
     print(f"Finished Post: {index}")
     print("\n=======================================================================================================\n")
-    time.sleep(5)  # Wait before processing the next post
-    if index == 5:
-        break
+    time.sleep(2)  # Wait before processing the next post
+
 
 # Upload the collected data to an Excel file
 upload = UploadData(comments=all_comments, post_details=all_details, comment_counts=counts_comments, account_details=account_details)
