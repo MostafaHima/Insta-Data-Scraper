@@ -35,11 +35,6 @@ all_comments = []  # List to store all comments collected from posts
 all_details = []  # List to store all post details
 counts_comments = []  # List to store the count of comments per post
 
-"https://www.instagram.com/raisa6690/"
-
-# User login credentials - Update with your own credentials
-# email = pifica6025@jonespal.com
-# password = dfg3r4r34efdsf234r34fdsdf44r523r
 
 # User login credentials - Prompt the user to input their credentials
 try:
